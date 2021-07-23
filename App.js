@@ -1,13 +1,49 @@
-import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import * as React from 'react';
+import { StyleSheet, SafeAreaView, View, Text } from 'react-native';
+import PostCards from './components/PostCards';
+import MakePost from './components/MakePost';
+import { NavigationContainer } from '@react-navigation/native';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import LoginForm from './components/LoginForm';
+import { useState } from 'react';
+
 
 export default function App() {
+  const [user, setUser] = useState({})
+
+  function HomeScreen() {
+    return (
+      <SafeAreaView>
+        <PostCards />
+      </SafeAreaView>
+    );
+  }
+  function PostScreen() {
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <MakePost />
+      </View>
+    );
+  }
+
+  const Tab = createBottomTabNavigator();
+
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <SafeAreaView style={styles.main}>
+      {user.username
+        ?
+        <NavigationContainer >
+          <Tab.Navigator>
+            <Tab.Screen name="Home" component={HomeScreen} />
+            <Tab.Screen name="Make A Post" component={PostScreen} />
+          </Tab.Navigator>
+        </NavigationContainer>
+        :
+        <SafeAreaView style={styles.container}>
+          <LoginForm setUser={setUser} />
+        </SafeAreaView>
+      }
+    </SafeAreaView>
   );
 }
 
@@ -18,4 +54,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  main: {
+    flex: 1,
+    position: "relative"
+  }
 });
