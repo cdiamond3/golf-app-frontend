@@ -2,43 +2,34 @@ import React, { useState, useEffect } from 'react'
 import { Button, Input, Card } from 'react-native-elements';
 import { StyleSheet, Text, SafeAreaView, ScrollView } from 'react-native';
 import { ListItem } from 'react-native-elements/dist/list/ListItem';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 
 export default function Posts({ post }) {
     const [comment, setComment] = useState("")
     const [postComments, setPostComments] = useState(post.comments)
 
-    // useEffect(() => {
-    //     fetch("http://localhost:3000/comments")
-    //         .then(res => res.json())
-    //         .then(data => {
-    //             const filteredPostComments = data.filter(d => {
-    //                 return d.post_id === post.id
-    //             })
-    //             const formattedPostComments = filteredPostComments.map(post => {
-    //                 return post.input + ""
-    //             })
-    //             setPostComments(formattedPostComments)
-    //         })
-    // }, [])
-
-    console.log("sting", postComments)
-
     const saveComment = () => {
-        fetch('http://localhost:3000/comments', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                "Accept": 'application/json'
-            },
-            body: JSON.stringify({
-                "comment": {
-                    "input": comment,
-                    "post_id": post.id
-                }
-            }),
-        })
-            .then(res => res.json())
-            .then(data => setPostComments([...postComments, data.input]))
+        AsyncStorage.getItem("token")
+            .then(result =>
+                fetch('http://localhost:3000/comments', {
+                    method: 'POST',
+                    headers: {
+                        Authorization: `Bearer ${result}`,
+                        'Content-Type': 'application/json',
+                        "Accept": 'application/json'
+                    },
+                    body: JSON.stringify({
+                        "post": {
+                            "comment": {
+                                "input": comment,
+                                "post_id": post.id
+                            }
+                        }
+                    }),
+                })
+                    .then(res => res.json())
+                    .then(data => setPostComments([...post.comments, data.input])))
     }
 
     return (
@@ -61,7 +52,7 @@ export default function Posts({ post }) {
             <Button
                 buttonStyle={{ borderRadius: 50, marginLeft: 0, marginRight: 0, marginBottom: 0 }}
                 title='Post Comment'
-                onPress={(e) => saveComment(e)}
+                onPress={() => saveComment()}
             />
         </Card>
     )

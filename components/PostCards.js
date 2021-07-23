@@ -1,3 +1,4 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import React from 'react'
 import { useState, useEffect } from 'react';
 import { StyleSheet, Text, SafeAreaView, ScrollView } from 'react-native';
@@ -7,14 +8,20 @@ export default function PostCards() {
     const [postsArea, setPostsArea] = useState([])
 
     useEffect(() => {
-        fetch("http://localhost:3000/posts")
-            .then(res => res.json())
-            .then(data => {
-                setPostsArea(data)
-            })
+        AsyncStorage.getItem("token")
+            .then(result =>
+                fetch("http://localhost:3000/posts", {
+                    method: 'GET',
+                    headers: {
+                        Authorization: `Bearer ${result}`
+                    },
+                })
+                    .then(res => res.json())
+                    .then(data => {
+                        setPostsArea(data)
+                    })
+            )
     }, [])
-
-
 
     const showPosts = () => postsArea.map(post => {
         return <Posts post={post} />

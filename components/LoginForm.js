@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { StyleSheet, View, Text, TextInput } from 'react-native';
 import { Button } from 'react-native-elements';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function LoginForm(props) {
 
@@ -11,17 +12,38 @@ export default function LoginForm(props) {
     const [newUserName, setNewUserName] = useState("")
     const [newUserPassword, setNewUserPassword] = useState("")
 
-    const handleSubmit1 = (e) => {
-        props.setUser({
-            username,
-            password,
+    const handleLogin = event => {
+        event.preventDefault();
+        fetch('http://localhost:3000/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                user: {
+                    username: username,
+                    password: password
+                }
+            })
         })
+            .then(response => response.json())
+            .then(result => {
+                if (result.error) {
+                    console.error(result.error);
+                } else {
+                    console.log('token', result.token);
+                    AsyncStorage.setItem('token', result.token)
+                        .then(props.setUser(result))
+                }
+            });
+        setUserName('');
+        setNewUserPassword('');
     }
 
     const saveUser = () => {
         const newUser = {
-            "username": newUserName,
-            "password": newUserPassword,
+            username: newUserName,
+            password: newUserPassword,
         }
         fetch('http://localhost:3000/users', {
             method: 'POST',
@@ -38,50 +60,59 @@ export default function LoginForm(props) {
         <SafeAreaView style={styles.container}>
             <TextInput
                 onChangeText={(text) => setUserName(text)}
-                style={styles.loginFormUN}
-                placeholder="username"
+                style={styles.loginForm}
+                placeholder="Enter Username..."
                 value={username}
             />
             <TextInput
                 onChangeText={(text) => setPassword(text)}
-                style={styles.loginFormPW}
-                placeholder="password"
+                style={styles.loginForm}
+                placeholder="Enter Password..."
                 value={password}
                 secureTextEntry={true}
             />
-            <Button title="Submit" style={styles.button} onPress={handleSubmit1} />
+            <Button title="Login" style={styles.button} onPress={handleLogin} />
+            <Text></Text>
             <TextInput
-                onChangeText={() => setNewUserName()}
-                style={styles.signinFormUN}
+                onChangeText={(e) => setNewUserName(e)}
+                style={styles.signinForm}
                 placeholder="Make New User"
-
             />
             <TextInput
                 onChangeText={(e) => setNewUserPassword(e)}
-                style={styles.signinFormPW}
-                placeholder="password"
-
+                style={styles.signinForm}
+                placeholder="Make New Password"
                 secureTextEntry={true}
             />
-            <Button title="Submit" onPress={(e) => saveUser(e)} />
+            <Button title="Register New user" style={styles.button} onPress={(e) => saveUser(e)} />
         </SafeAreaView>
 
     )
 }
 const styles = StyleSheet.create({
     container: {
-        flex: 1
+        flex: .5
     },
-    loginFormUN: {
-        flex:1,
-        padding:1,
-        margin:1,
-        position: "relative",
-        top:50
+    loginForm: {
+        borderWidth: 1,
+        width: 300,
+        height: 40,
+        borderRadius: 40 / 2,
+        padding: 10,
+        marginTop: 10,
     },
-    loginFormPW: {
-        flex:1,
-        padding:1,
-        margin:2
+    signinForm: {
+        borderWidth: 1,
+        width: 300,
+        height: 40,
+        borderRadius: 40 / 2,
+        padding: 10,
+        marginTop: 10,
+    },
+    button: {
+        // flex:1,
+        padding: 1,
+        margin: 1,
+        borderRadius: 40 / 2,
     }
 })
