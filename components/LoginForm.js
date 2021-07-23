@@ -82,6 +82,6 @@ const styles = StyleSheet.create({
     loginFormPW: {
         flex:1,
         padding:1,
-        margin:1
+        margin:2
     }
 })
