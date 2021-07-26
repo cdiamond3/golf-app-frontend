@@ -10,18 +10,21 @@ import { useState } from 'react';
 
 export default function App() {
   const [user, setUser] = useState({})
+  const [username, setUserName] = useState("")
+ 
+
 
   function HomeScreen() {
     return (
       <SafeAreaView>
-        <PostCards />
+        <PostCards key="postCardsKey" />
       </SafeAreaView>
     );
   }
   function PostScreen() {
     return (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <MakePost />
+        <MakePost key="postKey" user={username}/>
       </View>
     );
   }
@@ -40,7 +43,7 @@ export default function App() {
         </NavigationContainer>
         :
         <SafeAreaView style={styles.container}>
-          <LoginForm setUser={setUser} />
+          <LoginForm key="loginForm" setUser={setUser} setUserName={setUserName} username={username}/>
         </SafeAreaView>
       }
     </SafeAreaView>

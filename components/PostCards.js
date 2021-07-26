@@ -24,7 +24,7 @@ export default function PostCards() {
     }, [])
 
     const showPosts = () => postsArea.map(post => {
-        return <Posts post={post} />
+        return <Posts key={post.id} post={post} />
     })
 
     return (

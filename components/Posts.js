@@ -12,7 +12,7 @@ export default function Posts({ post }) {
     const saveComment = () => {
         AsyncStorage.getItem("token")
             .then(result =>
-                fetch('http://localhost:3000/comments', {
+                fetch('http://localhost:3000/posts', {
                     method: 'POST',
                     headers: {
                         Authorization: `Bearer ${result}`,

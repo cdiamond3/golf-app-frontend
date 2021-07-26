@@ -2,27 +2,34 @@ import React from 'react'
 import { StyleSheet, Text, SafeAreaView, ScrollView } from 'react-native';
 import { useState } from 'react';
 import { Button, Input } from 'react-native-elements';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
-export default function MakePost() {
+
+export default function MakePost(props) {
     const [post, setPost] = useState("")
     const dateLabel = new Date()
 
     const savePost = () => {
-
-        fetch('http://localhost:3000/posts', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                "Accept": 'application/json'
-            },
-            body: JSON.stringify({
-                input: post,
-                date: dateLabel,
-                user: "Test"
-            }),
-        })
-            .then(() => { })
+        AsyncStorage.getItem("token")
+            .then(token =>
+                fetch('http://localhost:3000/posts', {
+                    method: 'POST',
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        'Content-Type': 'application/json',
+                        "Accept": 'application/json'
+                    },
+                    body: JSON.stringify({
+                        "post": {
+                            "input": post,
+                            "date": dateLabel,
+                        }
+                    }),
+                })
+                    .then(result => console.log(result))
+                    .then(() => { })
+            )
     }
     return (
         <SafeAreaView style={styles.input}>

@@ -4,9 +4,8 @@ import { Button } from 'react-native-elements';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-export default function LoginForm(props) {
+export default function LoginForm({setUser, setUserName, username}) {
 
-    const [username, setUserName] = useState("")
     const [password, setPassword] = useState("")
 
     const [newUserName, setNewUserName] = useState("")
@@ -33,7 +32,7 @@ export default function LoginForm(props) {
                 } else {
                     console.log('token', result.token);
                     AsyncStorage.setItem('token', result.token)
-                        .then(props.setUser(result))
+                        .then(setUser(result))
                 }
             });
         setUserName('');
