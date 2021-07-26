@@ -12,7 +12,7 @@ export default function Posts({ post }) {
     const saveComment = () => {
         AsyncStorage.getItem("token")
             .then(result =>
-                fetch('http://localhost:3000/posts', {
+                fetch('http://localhost:3000/comments', {
                     method: 'POST',
                     headers: {
                         Authorization: `Bearer ${result}`,
@@ -20,11 +20,9 @@ export default function Posts({ post }) {
                         "Accept": 'application/json'
                     },
                     body: JSON.stringify({
-                        "post": {
                             "comment": {
                                 "input": comment,
                                 "post_id": post.id
-                            }
                         }
                     }),
                 })
@@ -35,7 +33,7 @@ export default function Posts({ post }) {
     return (
         <Card style={styles.postCard}>
             <Text style={styles.title}>{post.input}</Text>
-            <Text style={styles.age}>{post.user}</Text>
+            <Text style={styles.age}>{post.user.username}</Text>
             <Text style={styles.age}>{post.date}</Text>
             <Input
                 placeholder="Comment"
@@ -43,11 +41,9 @@ export default function Posts({ post }) {
                 onChangeText={(e) => setComment(e)}
             />
             <Card>
-                <Text style={styles.comments}>{postComments.map(c => {
-                    return <ListItem>
-                        <Text> {c.input} </Text>
-                    </ListItem>
-                })}</Text>
+                <Text> {post.comments.map(comment => {
+                    return <Text>{"user" + comment.user.username + ":" + comment.input}</Text>
+                })} </Text>
             </Card>
             <Button
                 buttonStyle={{ borderRadius: 50, marginLeft: 0, marginRight: 0, marginBottom: 0 }}

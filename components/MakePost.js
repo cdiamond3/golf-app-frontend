@@ -8,6 +8,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function MakePost(props) {
     const [post, setPost] = useState("")
+    const [currentUser, setCurrentUser] = useState({})
     const dateLabel = new Date()
 
     const savePost = () => {

@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { StyleSheet, Text, SafeAreaView, ScrollView } from 'react-native';
 import Posts from './Posts';
 
-export default function PostCards() {
+export default function PostCards({user}) {
     const [postsArea, setPostsArea] = useState([])
 
     useEffect(() => {
