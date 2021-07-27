@@ -8,7 +8,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function MakePost(props) {
     const [post, setPost] = useState("")
-    const [currentUser, setCurrentUser] = useState({})
     const dateLabel = new Date()
 
     const savePost = () => {
@@ -28,7 +27,8 @@ export default function MakePost(props) {
                         }
                     }),
                 })
-                    .then(result => console.log(result))
+                    .then(res => res.json())
+                    .then(data => props.setPostsArea(...props.postsArea, data))
                     .then(() => { })
             )
     }

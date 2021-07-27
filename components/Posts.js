@@ -1,13 +1,11 @@
 import React, { useState, useEffect } from 'react'
-import { Button, Input, Card } from 'react-native-elements';
-import { StyleSheet, Text, SafeAreaView, ScrollView } from 'react-native';
-import { ListItem } from 'react-native-elements/dist/list/ListItem';
+import { Button, Input, Card, ListItem } from 'react-native-elements';
+import { StyleSheet, Text, View, ScrollView } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 export default function Posts({ post }) {
     const [comment, setComment] = useState("")
-    const [postComments, setPostComments] = useState(post.comments)
 
     const saveComment = () => {
         AsyncStorage.getItem("token")
@@ -20,9 +18,9 @@ export default function Posts({ post }) {
                         "Accept": 'application/json'
                     },
                     body: JSON.stringify({
-                            "comment": {
-                                "input": comment,
-                                "post_id": post.id
+                        "comment": {
+                            "input": comment,
+                            "post_id": post.id
                         }
                     }),
                 })
@@ -31,7 +29,7 @@ export default function Posts({ post }) {
     }
 
     return (
-        <Card style={styles.postCard}>
+        <Card style={styles.container}>
             <Text style={styles.title}>{post.input}</Text>
             <Text style={styles.age}>{post.user.username}</Text>
             <Text style={styles.age}>{post.date}</Text>
@@ -40,11 +38,22 @@ export default function Posts({ post }) {
                 leftIcon={{ type: 'font-awesome', name: 'comment' }}
                 onChangeText={(e) => setComment(e)}
             />
-            <Card>
-                <Text> {post.comments.map(comment => {
-                    return <Text>{"user" + comment.user.username + ":" + comment.input}</Text>
+            <ScrollView>
+                <Text > {post.comments.map(comment => {
+                    return <View>
+                        <ListItem bottomDivider style={styles.comments}>
+                            {/* <ListItem.Content> */}
+                                {/* <ListItem.Title > */}
+                                    <Text>{"user" + comment.user.username + ":" + comment.input}</Text>
+                                {/* </ListItem.Title> */}
+                            {/* </ListItem.Content > */}
+                        </ListItem >
+                    </View>
                 })} </Text>
-            </Card>
+            </ScrollView>
+
+
+
             <Button
                 buttonStyle={{ borderRadius: 50, marginLeft: 0, marginRight: 0, marginBottom: 0 }}
                 title='Post Comment'
@@ -56,12 +65,23 @@ export default function Posts({ post }) {
 
 const styles = StyleSheet.create({
 
-    comments: {
+    container: {
         flex: 1,
-        flexDirection: "row",
+        flexDirection:"column",
         flexWrap: "wrap",
         justifyContent: "center",
         margin: 1,
         padding: 1,
+        backgroundColor: "red"
+    },
+    comments: {
+        flex: 1,
+        width:325,
+        height:1,
+        flexWrap: "wrap",
+        textAlign: "left",
+        padding: 1,
+        margin: 1,
+        // backgroundColor: "pink"
     }
 });

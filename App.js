@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { StyleSheet, SafeAreaView, View, Text } from 'react-native';
 import PostCards from './components/PostCards';
-import MakePost from './components/MakePost';
+import SubmitPostForm from './components/SubmitPostForm';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import LoginForm from './components/LoginForm';
@@ -11,20 +11,20 @@ import { useState } from 'react';
 export default function App() {
   const [user, setUser] = useState({})
   const [username, setUserName] = useState("")
- 
+  const [postsArea, setPostsArea] = useState([])
 
 
   function HomeScreen() {
     return (
       <SafeAreaView>
-        <PostCards key="postCardsKey" />
+        <PostCards key="postCardsKey" postsArea={postsArea} setPostsArea={setPostsArea}/>
       </SafeAreaView>
     );
   }
   function PostScreen() {
     return (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <MakePost key="postKey" user={username}/>
+        <SubmitPostForm key="postKey" user={username} postsArea={postsArea} setPostsArea={setPostsArea}/>
       </View>
     );
   }
@@ -53,12 +53,13 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
+    
+
   },
   main: {
     flex: 1,
-    position: "relative"
+    position: "relative",
   }
 });

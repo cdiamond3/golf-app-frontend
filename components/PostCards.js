@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { StyleSheet, Text, SafeAreaView, ScrollView } from 'react-native';
 import Posts from './Posts';
 
-export default function PostCards({user}) {
+export default function PostCards() {
     const [postsArea, setPostsArea] = useState([])
 
     useEffect(() => {
@@ -24,7 +24,7 @@ export default function PostCards({user}) {
     }, [])
 
     const showPosts = () => postsArea.map(post => {
-        return <Posts key={post.id} post={post} />
+        return <Posts key={post.id} post={post} setPostsArea={setPostsArea}/>
     })
 
     return (
@@ -40,5 +40,6 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
         alignItems: 'center',
         justifyContent: 'center',
+        backgroundColor:"red"
     },
 });
