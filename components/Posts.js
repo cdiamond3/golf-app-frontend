@@ -24,8 +24,7 @@ export default function Posts({ post }) {
                         }
                     }),
                 })
-                    .then(res => res.json())
-                    .then(data => setPostComments([...post.comments, data.input])))
+                    .then(res => res.json()))
     }
 
     return (
@@ -38,21 +37,15 @@ export default function Posts({ post }) {
                 leftIcon={{ type: 'font-awesome', name: 'comment' }}
                 onChangeText={(e) => setComment(e)}
             />
-            <ScrollView>
+            <ScrollView >
                 <Text > {post.comments.map(comment => {
-                    return <View>
-                        <ListItem bottomDivider style={styles.comments}>
-                            {/* <ListItem.Content> */}
-                                {/* <ListItem.Title > */}
-                                    <Text>{"user" + comment.user.username + ":" + comment.input}</Text>
-                                {/* </ListItem.Title> */}
-                            {/* </ListItem.Content > */}
+                    return <View >
+                        <ListItem bottomDivider >
+                            <Text style={styles.comments}> {"user" + comment.user.username + ":" + comment.input}</Text>
                         </ListItem >
                     </View>
                 })} </Text>
             </ScrollView>
-
-
 
             <Button
                 buttonStyle={{ borderRadius: 50, marginLeft: 0, marginRight: 0, marginBottom: 0 }}
@@ -67,7 +60,7 @@ const styles = StyleSheet.create({
 
     container: {
         flex: 1,
-        flexDirection:"column",
+        flexDirection: "column",
         flexWrap: "wrap",
         justifyContent: "center",
         margin: 1,
@@ -76,12 +69,10 @@ const styles = StyleSheet.create({
     },
     comments: {
         flex: 1,
-        width:325,
-        height:1,
+        width: 325,
+        height: 35,
         flexWrap: "wrap",
         textAlign: "left",
         padding: 1,
-        margin: 1,
-        // backgroundColor: "pink"
     }
 });

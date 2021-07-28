@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { StyleSheet, SafeAreaView, View, Text } from 'react-native';
+import { StyleSheet, SafeAreaView, View, Platform, Button } from 'react-native';
 import PostCards from './components/PostCards';
 import SubmitPostForm from './components/SubmitPostForm';
 import { NavigationContainer } from '@react-navigation/native';
@@ -12,19 +12,18 @@ export default function App() {
   const [user, setUser] = useState({})
   const [username, setUserName] = useState("")
   const [postsArea, setPostsArea] = useState([])
-
-
+  
   function HomeScreen() {
     return (
       <SafeAreaView>
-        <PostCards key="postCardsKey" postsArea={postsArea} setPostsArea={setPostsArea}/>
+        <PostCards key="postCardsKey" postsArea={postsArea} setPostsArea={setPostsArea} />
       </SafeAreaView>
     );
   }
   function PostScreen() {
     return (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <SubmitPostForm key="postKey" user={username} postsArea={postsArea} setPostsArea={setPostsArea}/>
+        <SubmitPostForm key="postKey" user={username} postsArea={postsArea} setPostsArea={setPostsArea} />
       </View>
     );
   }
@@ -43,7 +42,7 @@ export default function App() {
         </NavigationContainer>
         :
         <SafeAreaView style={styles.container}>
-          <LoginForm key="loginForm" setUser={setUser} setUserName={setUserName} username={username}/>
+          <LoginForm key="loginForm" setUser={setUser} setUserName={setUserName} username={username} />
         </SafeAreaView>
       }
     </SafeAreaView>
@@ -55,7 +54,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    
+
 
   },
   main: {
