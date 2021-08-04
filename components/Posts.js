@@ -4,7 +4,7 @@ import { StyleSheet, View, ScrollView, Alert } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
-export default function Posts({ post, setPostsArea, postsArea, user }) {
+export default function Posts({ post, setPostsArea, postsArea, user, setMyProfile, myProfile }) {
     const [comment, setComment] = useState("")
 
     console.log(user.user.id)
@@ -28,6 +28,11 @@ export default function Posts({ post, setPostsArea, postsArea, user }) {
                     }),
                 })
                     .then(res => res.json()))
+                    // .then(newRating => {
+                    //     const ratingToUpdate = myProfile.ratings_count + 1
+                    //     const updatedRating = myProfile.ratings_sum + newRating
+                    //     setMyProfile(updatedRating / ratingToUpdate)
+                    // })
         Alert.alert(
             "Alert!",
             `You have rated this comment a ${rating} out of 5!`,

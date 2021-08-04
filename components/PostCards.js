@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { StyleSheet, ScrollView, ImageBackground } from 'react-native';
 import Posts from './Posts';
 
-export default function PostCards({user}) {
+export default function PostCards({user, myProfile, setMyProfile}) {
     const [postsArea, setPostsArea] = useState([])
 
     useEffect(() => {
@@ -24,7 +24,7 @@ export default function PostCards({user}) {
     }, [])
 
     const showPosts = () => postsArea.map(post => {
-        return <Posts key={post.id} post={post} postsArea={postsArea} user={user} setPostsArea={setPostsArea}/>
+        return <Posts key={post.id} post={post} postsArea={postsArea} user={user} setPostsArea={setPostsArea} myProfile={myProfile} setMyProfile={setMyProfile}/>
     })
 
     const image = { uri: "https://wallpaperaccess.com/full/1128313.jpg" };

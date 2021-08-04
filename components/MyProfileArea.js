@@ -1,30 +1,11 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import React from 'react'
 import { useState, useEffect } from 'react';
 import { StyleSheet, ScrollView, ImageBackground  } from 'react-native';
 import ProfileCards from './ProfileCards';
 
 
-export default function MyProfileArea({user}) {
-    const [myProfile, setMyProfile] = useState({})
-
-    useEffect(() => {
-        AsyncStorage.getItem("token")
-            .then(result =>
-                fetch("http://localhost:3000/profile", {
-                    method: 'GET',
-                    headers: {
-                        Authorization: `Bearer ${result}`
-                    },
-                })
-                    .then(res => res.json())
-                    .then(data => {
-                        // console.log(data.comments)
-                        console.log(data)
-                        setMyProfile(data)
-                    })
-            )
-        }, [])
+export default function MyProfileArea({user, myProfile, setMyProfile}) {
+    
         
         const image = { uri: "https://wallpaperaccess.com/full/1128313.jpg" };
 

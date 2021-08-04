@@ -5,25 +5,45 @@ import SubmitPostForm from './components/SubmitPostForm';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import LoginForm from './components/LoginForm';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Header } from 'react-native-elements';
 import ApiKeys from './constants/ApiKeys';
 import * as firebase from 'firebase'
 import '@firebase/firestore';
 import MyProfileArea from './components/MyProfileArea';
 import { Appbar } from 'react-native-paper';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 
 
 export default function App() {
   const [user, setUser] = useState({})
   const [username, setUserName] = useState("")
   const [postsArea, setPostsArea] = useState([])
+  const [myProfile, setMyProfile] = useState({})
 
+  useEffect(() => {
+      AsyncStorage.getItem("token")
+          .then(result =>
+              fetch("http://localhost:3000/profile", {
+                  method: 'GET',
+                  headers: {
+                      Authorization: `Bearer ${result}`
+                  },
+              })
+                  .then(res => res.json())
+                  .then(data => {
+                      // console.log(data.comments)
+                      console.log(data)
+                      setMyProfile(data)
+                  })
+          )
+      }, [])
 
   function HomeScreen() {
     return (
       <SafeAreaView>
-        <PostCards key="postCardsKey" postsArea={postsArea} setPostsArea={setPostsArea} user={user} />
+        <PostCards key="postCardsKey" postsArea={postsArea} setPostsArea={setPostsArea} user={user} setMyProfile={setMyProfile} myProfile={myProfile}/>
       </SafeAreaView>
     );
   }
@@ -37,7 +57,7 @@ export default function App() {
   function ProfileScreen() {
     return (
       <SafeAreaView>
-        <MyProfileArea user={user} />
+        <MyProfileArea user={user} myProfile={myProfile} setMyProfile={setMyProfile}/>
       </SafeAreaView>
     );
   }

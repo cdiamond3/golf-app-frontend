@@ -3,9 +3,10 @@ import { View } from 'react-native';
 import { Card, Text, ListItem } from 'react-native-elements';
 import { StyleSheet } from 'react-native';
 
-export default function ProfileCards({ myProfile, user }) {
+export default function ProfileCards({ myProfile }) {
 
     const dateLabel = new Date()
+
     
 return (
     <View style={styles.card}>
@@ -14,17 +15,17 @@ return (
             <Card.Divider />
             <Card style={styles.card}>
                 <View>
-                    <Text h3 style={styles.rating}>My Average Comment Rating: {myProfile.average_user_rating}</Text>
+                    <Text h4 style={styles.rating}>My Average Comment Rating: {myProfile.average_user_rating}</Text>
                 </View>
             </Card>
         </Card>
 
         <Card style={styles.card}>
-            <Card.Title>My Instructor Ranking!</Card.Title>
+            <Card.Title h3 >My Instructor Ranking!</Card.Title>
             <Card.Divider />
             <Card style={styles.card}>
                 <View>
-                    <Text style={styles.name}>Semi-Pro</Text>
+                    <Text h4 style={styles.rank}>{myProfile.rating_name}</Text>
                 </View>
             </Card>
         </Card>
@@ -35,7 +36,7 @@ return (
             <Card>
                 <View>
                     {myProfile.comments?.map(comment => {
-                        return <Text style={styles.myComments}> {comment.input + " " + dateLabel}</Text>
+                        return <Text key={comment.id} style={styles.myComments}> {comment.input + " " + dateLabel}</Text>
                     })}
                 </View>
             </Card>
@@ -47,7 +48,7 @@ return (
             <Card>
                 <View>
                     {myProfile.posts?.map(post => {
-                        return <Text style={styles.myPosts}>{post.input + " " + dateLabel}</Text>
+                        return <Text key={post.id} style={styles.myPosts}>{post.input + " " + dateLabel}</Text>
                     })}
                 </View>
             </Card>
@@ -76,6 +77,26 @@ const styles = StyleSheet.create({
         borderRadius: 200
     },
     myComments: {
+        flex: 1,
+        flexDirection: "column",
+        flexWrap: "wrap",
+        justifyContent: "space-evenly",
+        margin: 10,
+        padding: 4,
+        textAlign: "center"
+        
+    },
+    rating: {
+        flex: 1,
+        flexDirection: "column",
+        flexWrap: "wrap",
+        justifyContent: "space-evenly",
+        margin: 10,
+        padding: 4,
+        textAlign: "center"
+        
+    },
+    rank: {
         flex: 1,
         flexDirection: "column",
         flexWrap: "wrap",
