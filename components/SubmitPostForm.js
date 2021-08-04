@@ -1,10 +1,9 @@
 import React from 'react'
-import { StyleSheet, SafeAreaView, View, Platform, Button } from 'react-native';
-import { useState, useEffect  } from 'react';
-import { Input } from 'react-native-elements';
+import { StyleSheet, SafeAreaView, Text, Button, View } from 'react-native';
+import { useState } from 'react';
+import { Input, ImageBackground } from 'react-native-elements';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import * as ImagePicker from 'expo-image-picker';
-import * as firebase from 'firebase/app';
+import ImageUpload from './ImageUpload';
 
 
 
@@ -12,33 +11,6 @@ export default function MakePost(props) {
     const [post, setPost] = useState("")
     const dateLabel = new Date()
 
-    const [image, setImage] = useState(null);
-
-    useEffect(() => {
-        (async () => {
-            if (Platform.OS !== 'web') {
-                const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-                if (status !== 'granted') {
-                    alert('Sorry, we need camera roll permissions to make this work!');
-                }
-            }
-        })();
-    }, []);
-
-    const pickImage = async () => {
-        let result = await ImagePicker.launchImageLibraryAsync({
-            mediaTypes: ImagePicker.MediaTypeOptions.All,
-            allowsEditing: true,
-            aspect: [4, 3],
-            quality: 1,
-        });
-
-        console.log(result);
-
-        if (!result.cancelled) {
-            setImage(result.uri);
-        }
-    };
 
     const savePost = () => {
         AsyncStorage.getItem("token")
@@ -62,10 +34,15 @@ export default function MakePost(props) {
                     .then(() => { })
             )
     }
+
+    const image = { uri: "https://wallpaperaccess.com/full/1128313.jpg" };
+
+
+
     return (
         <SafeAreaView style={styles.input}>
             <Input
-                placeholder="Comment"
+                placeholder="Post"
                 onChangeText={(e) => setPost(e)}
             />
             <Button
@@ -73,13 +50,12 @@ export default function MakePost(props) {
                 title='Post'
                 onPress={(e) => savePost(e)}
             />
-             <View >
-                <Button title="Pick an image from camera roll" onPress={pickImage} />
-                {image && <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />}
+            <View>
+                <ImageUpload style={styles.container}/>
             </View>
         </SafeAreaView>
     )
-}
+};
 
 const styles = StyleSheet.create({
     container: {
@@ -89,6 +65,11 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     input: {
+        flex: 1,
+        position: "relative",
+        top: 300,
         width: 200
-    }
+    },
 });
+
+

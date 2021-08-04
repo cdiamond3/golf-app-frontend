@@ -1,10 +1,10 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React from 'react'
 import { useState, useEffect } from 'react';
-import { StyleSheet, Text, SafeAreaView, ScrollView } from 'react-native';
+import { StyleSheet, ScrollView, ImageBackground } from 'react-native';
 import Posts from './Posts';
 
-export default function PostCards() {
+export default function PostCards({user}) {
     const [postsArea, setPostsArea] = useState([])
 
     useEffect(() => {
@@ -24,12 +24,18 @@ export default function PostCards() {
     }, [])
 
     const showPosts = () => postsArea.map(post => {
-        return <Posts key={post.id} post={post} setPostsArea={setPostsArea}/>
+        return <Posts key={post.id} post={post} postsArea={postsArea} user={user} setPostsArea={setPostsArea}/>
     })
+
+    const image = { uri: "https://wallpaperaccess.com/full/1128313.jpg" };
+
 
     return (
         <ScrollView style={styles.ScrollView}>
+        <ImageBackground source={image} resizeMode="cover" style={styles.image} blurRadius={1}>
             {showPosts()}
+        </ImageBackground>
+
         </ScrollView>
     )
 }
@@ -37,9 +43,12 @@ export default function PostCards() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#fff',
         alignItems: 'center',
         justifyContent: 'center',
         backgroundColor:"red"
     },
+    image: {
+        flex: 1,
+        justifyContent: "center"
+      },
 });
