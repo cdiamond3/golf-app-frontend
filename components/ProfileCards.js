@@ -31,7 +31,7 @@ return (
         </Card>
 
         <Card>
-            <Card.Title>My Comments</Card.Title>
+            <Card.Title h4>My Comments</Card.Title>
             <Card.Divider />
             <Card>
                 <View>
@@ -43,7 +43,7 @@ return (
         </Card>
 
         <Card>
-            <Card.Title>My Posts</Card.Title>
+            <Card.Title h4>My Posts</Card.Title>
             <Card.Divider />
             <Card>
                 <View>

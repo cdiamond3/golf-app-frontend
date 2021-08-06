@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Button, Input, Card, Rating, Text, Avatar } from 'react-native-elements';
+import { Input, Card, Rating, Text, Button } from 'react-native-elements';
 import { StyleSheet, View, ScrollView, Alert } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -7,7 +7,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 export default function Posts({ post, setPostsArea, postsArea, user, setMyProfile, myProfile }) {
     const [comment, setComment] = useState("")
 
-    console.log(user.user.id)
 
     function ratingCompleted(rating, comment) {
         AsyncStorage.getItem("token")
@@ -25,14 +24,23 @@ export default function Posts({ post, setPostsArea, postsArea, user, setMyProfil
                             "user_id": user.user.id,
                             "comment_id": comment.id
                         }
-                    }),
+                    })
                 })
-                    .then(res => res.json()))
-                    // .then(newRating => {
-                    //     const ratingToUpdate = myProfile.ratings_count + 1
-                    //     const updatedRating = myProfile.ratings_sum + newRating
-                    //     setMyProfile(updatedRating / ratingToUpdate)
-                    // })
+                    .then(res => res.json())
+                    .then(newRating => {
+                        console.log("Hellllo", myProfile.average_user_rating)
+                        const newCount = myProfile.ratings_count + 1
+                        const newSum = myProfile.ratings_sum + newRating.value
+                        const updatedProfile = {
+                            ...myProfile,
+                            ratings_count: newCount,
+                            ratings_sum: newSum,
+                            average_user_rating: parseFloat( (newSum / newCount).toFixed(2) )
+                        }
+                        setMyProfile(updatedProfile)
+                        console.log(myProfile.average_user_rating)
+                    })
+            )
         Alert.alert(
             "Alert!",
             `You have rated this comment a ${rating} out of 5!`,
@@ -42,8 +50,6 @@ export default function Posts({ post, setPostsArea, postsArea, user, setMyProfil
         );
         console.log(rating)
     }
-
-    
 
     const saveComment = () => {
         AsyncStorage.getItem("token")
@@ -64,13 +70,15 @@ export default function Posts({ post, setPostsArea, postsArea, user, setMyProfil
                     }),
                 })
                     .then(res => res.json()))
+            // .then(console.log)
+            // .then(console.warn("Test"))
             .then(newComment => {
-                const postToUpdate = postsArea.find(postArea => post.id === postArea.id)
-                postToUpdate.comments = [...postToUpdate.comments, newComment]
-                const updatedPostArea = postsArea.filter(postArea => postArea.id !== postToUpdate.id)
-                setPostsArea([postToUpdate, ...updatedPostArea])
+                const updatedPost = postsArea.find(postArea => post.id === postArea.id)
+                updatedPost.comments = [...updatedPost.comments, newComment]
+                const allOtherPosts = postsArea.filter(postArea => postArea.id !== updatedPost.id)
+                setPostsArea([updatedPost, ...allOtherPosts])
             })
-            .then(setComment(" "))
+        setComment("")
     }
 
     return (
@@ -83,6 +91,7 @@ export default function Posts({ post, setPostsArea, postsArea, user, setMyProfil
                     <Input
                         style={styles.input}
                         placeholder="Comment"
+                        value={comment}
                         leftIcon={{ type: 'font-awesome', name: 'comment', color: 'white' }}
                         onChangeText={(e) => setComment(e)}
                     />
@@ -100,6 +109,9 @@ export default function Posts({ post, setPostsArea, postsArea, user, setMyProfil
                                     type='star'
                                     ratingCount={5}
                                     imageSize={20}
+                                    value={5}
+                                    // defaultRating={5}
+                                    startingValue={5}
                                     showRating
                                     onFinishRating={rating => ratingCompleted(rating, comment)}
                                 />
@@ -151,7 +163,7 @@ const styles = StyleSheet.create({
         backgroundColor: "white",
         borderRadius: 30,
         padding: 2,
-        marginLeft:10
+        marginLeft: 10
     },
     title: {
         color: "white",

@@ -41,6 +41,7 @@ export default function MakePost(props) {
 
     return (
         <SafeAreaView style={styles.input}>
+            
             <Input
                 placeholder="Post"
                 onChangeText={(e) => setPost(e)}
